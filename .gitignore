@@ -1,2 +1,5 @@
 # Build folder
 build/
+
+# Visual Studio files
+.vs/
