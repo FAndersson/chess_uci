@@ -9,7 +9,7 @@
 namespace chess {
 namespace uci {
 
-TEST_CASE("chess::uci::Communication.Read uci messages", "[communication], [chess], [uci]")
+TEST_CASE("chess::uci::Read_engine_messages.Read uci messages", "[communication], [chess], [uci]")
 {
 	std::stringstream stream;
 
@@ -28,7 +28,7 @@ TEST_CASE("chess::uci::Communication.Read uci messages", "[communication], [ches
 	REQUIRE(messages[3] == "uciok");
 }
 
-TEST_CASE("chess::uci::Communication.Read isready messages", "[communication], [chess], [uci]")
+TEST_CASE("chess::uci::Read_engine_messages.Read isready messages", "[communication], [chess], [uci]")
 {
 	std::stringstream stream;
 
@@ -43,7 +43,7 @@ TEST_CASE("chess::uci::Communication.Read isready messages", "[communication], [
 	REQUIRE(messages[1] == "readyok");
 }
 
-TEST_CASE("chess::uci::Communication.Read go messages", "[communication], [chess], [uci]")
+TEST_CASE("chess::uci::Read_engine_messages.Read go messages", "[communication], [chess], [uci]")
 {
 	std::stringstream stream;
 
