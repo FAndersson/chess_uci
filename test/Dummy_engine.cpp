@@ -11,13 +11,14 @@ int main()
 		if (command == "isready") {
 			std::cout << "readyok\n";
 		}
-		if (command == "stop")
+		if (command == "stop") {
 			std::cout << "bestmove e2e4\n";
+		}
 		if (command == "quit")
 			return 0;
-		if (command == "go")
-			// Do nothing
-			;
+		if (command == "go") {
+			std::cout << "info multipv 1 score cp 30 pv e2e4\n";
+		}
 		if (command == "ucinewgame")
 			// Do nothing
 			;
