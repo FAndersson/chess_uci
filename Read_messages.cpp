@@ -1,6 +1,6 @@
 #include "Read_messages.h"
 
-#include <iostream>
+#include <istream>
 
 namespace chess {
 namespace uci {
