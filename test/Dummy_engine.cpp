@@ -16,7 +16,7 @@ int main()
 		}
 		if (command == "quit")
 			return 0;
-		if (command == "go") {
+		if (command.substr(0, 2) == "go") {
 			std::cout << "info multipv 1 score cp 30 pv e2e4\n";
 		}
 		if (command == "ucinewgame")
