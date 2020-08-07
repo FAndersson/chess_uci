@@ -1,5 +1,6 @@
 #include "Parse_messages.h"
 
+#include <cassert>
 #include <cstring>
 #include <stdexcept>
 #include <string>
@@ -20,6 +21,9 @@ Info parse_info(const std::string& info_str)
 	if (size_t pos = info_str.find("multipv"); pos != std::string::npos) {
 		try {
 			info.line_index = std::stoi(info_str.substr(pos + 8));
+			assert(*info.line_index >= 1);
+			// Convert engine enumeration to zero-based indexing
+			info.line_index = *info.line_index - 1;
 		} catch (std::exception& e) {
 			throw std::runtime_error(std::string("Error parsing multipv: ") + e.what());
 		}

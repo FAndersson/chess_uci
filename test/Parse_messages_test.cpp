@@ -108,7 +108,7 @@ TEST_CASE("chess::uci::Parse_messages.Parse info", "[parsing], [chess], [uci]")
 	REQUIRE(info.evaluation->centi_pawns.has_value());
 	CHECK(*info.evaluation->centi_pawns == 114);
 	REQUIRE(info.line_index.has_value());
-	CHECK(info.line_index == 1);
+	CHECK(info.line_index == 0);
 	REQUIRE(info.nodes.has_value());
 	CHECK(info.nodes == 20);
 	REQUIRE(info.sequence_of_moves.has_value());
@@ -121,7 +121,7 @@ TEST_CASE("chess::uci::Parse_messages.Parse info", "[parsing], [chess], [uci]")
 	REQUIRE(info.evaluation->centi_pawns.has_value());
 	CHECK(*info.evaluation->centi_pawns == 45);
 	REQUIRE(info.line_index.has_value());
-	CHECK(info.line_index == 1);
+	CHECK(info.line_index == 0);
 	REQUIRE(info.nodes.has_value());
 	CHECK(info.nodes == 3036);
 	REQUIRE(info.sequence_of_moves.has_value());
@@ -134,7 +134,7 @@ TEST_CASE("chess::uci::Parse_messages.Parse info", "[parsing], [chess], [uci]")
 	REQUIRE(info.evaluation->centi_pawns.has_value());
 	CHECK(*info.evaluation->centi_pawns == 26);
 	REQUIRE(info.line_index.has_value());
-	CHECK(info.line_index == 10);
+	CHECK(info.line_index == 9);
 	REQUIRE(info.nodes.has_value());
 	CHECK(info.nodes == 3079);
 	REQUIRE(info.sequence_of_moves.has_value());
