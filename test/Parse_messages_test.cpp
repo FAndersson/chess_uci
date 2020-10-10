@@ -2,7 +2,7 @@
 
 #include "Parse_messages.h"
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 namespace chess {
 namespace uci {

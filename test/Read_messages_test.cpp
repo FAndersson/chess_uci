@@ -2,7 +2,7 @@
 
 #include "Read_messages.h"
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 #include <sstream>
 
