@@ -8,8 +8,6 @@
 #include "Evaluation.h"
 #include "Line.h"
 
-#include <boost/process.hpp>
-
 #include <chrono>
 #include <filesystem>
 #include <memory>
@@ -18,7 +16,10 @@
 
 namespace chess {
 namespace uci {
-	
+
+// Forward declaration
+struct Engine_process_manager;
+
 /**
  * \class Engine
  * \brief Interface to run and communicate with a backend UCI (universal chess interface) compatible
@@ -96,13 +97,8 @@ private:
     /// Parse engine messages received after the previous go command.
 	void parse_engine_go_messages(const std::vector<std::string>& messages);
 
-    /// Stream which the engine writes it's messages to.
-	boost::process::pstream engine_to_host_;
-    /// Stream which the engine reads commands from.
-	boost::process::pstream host_to_engine_;
-
-    /// Child process running the engine.
-	boost::process::child engine_child_process_;
+    /// Struct managing the engine process and inter process communication.
+    std::unique_ptr<Engine_process_manager> engine_process;
 
     /// Number of best lines the engine should calculate.
     uint8_t num_best_lines_{1};

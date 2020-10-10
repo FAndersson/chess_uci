@@ -3,37 +3,56 @@
 #include "Read_messages.h"
 #include "Parse_messages.h"
 
+#include <boost/process.hpp>
+
 #include <cassert>
 
 namespace chess {
 namespace uci {
 
+struct Engine_process_manager
+{
+	Engine_process_manager(const std::filesystem::path& engine_executable)
+		: engine_child_process_(engine_executable.string(), boost::process::std_out > engine_to_host_, boost::process::std_in < host_to_engine_)
+	{}
+
+	/// Stream which the engine writes it's messages to.
+	boost::process::pstream engine_to_host_;
+	/// Stream which the engine reads commands from.
+	boost::process::pstream host_to_engine_;
+
+	/// Child process running the engine.
+	boost::process::child engine_child_process_;
+};
+
 Engine::Engine(const std::filesystem::path& engine_executable, uint8_t num_best_lines, std::optional<uint16_t> max_elo_rating)
-	: engine_child_process_(engine_executable.string(), boost::process::std_out > engine_to_host_, boost::process::std_in < host_to_engine_)
+	: engine_process(std::make_unique<Engine_process_manager>(engine_executable))
 	, num_best_lines_(num_best_lines)
 {	
 	// Tell engine to use UCI
-	host_to_engine_ << "uci\n" << std::flush;
+	engine_process->host_to_engine_ << "uci\n"
+									<< std::flush;
 	// Wait for uciok reply
-	auto replies = read_uci_replies(engine_to_host_);
+	auto replies = read_uci_replies(engine_process->engine_to_host_);
 	if (replies.empty())
 		throw std::runtime_error("Engine error: Engine did not send the 'uciok' message");
 	if (replies.back() != "uciok")
 		throw std::runtime_error("Engine error: Unexpected engine message. Expected 'uciok', got " + replies.back() + ".");
 	// Set multi pv setting
-	host_to_engine_ << "setoption name MultiPV value " << (int)num_best_lines << "\n" << std::flush;
+	engine_process->host_to_engine_ << "setoption name MultiPV value " << (int)num_best_lines << "\n"
+									<< std::flush;
 	// Set max ELO rating
 	if (max_elo_rating.has_value()) {
-		host_to_engine_ << "setoption name UCI_LimitStrength value true\n"
-						   << std::flush;
-		host_to_engine_ << "setoption name UCI_Elo value " << *max_elo_rating << "\n"
-						   << std::flush;
+		engine_process->host_to_engine_ << "setoption name UCI_LimitStrength value true\n"
+										<< std::flush;
+		engine_process->host_to_engine_ << "setoption name UCI_Elo value " << *max_elo_rating << "\n"
+										<< std::flush;
 	}
 
 	// Send isready command and wait for reply
-	host_to_engine_ << "isready\n"
-					   << std::flush;
-	replies = read_isready_replies(engine_to_host_);
+	engine_process->host_to_engine_ << "isready\n"
+									<< std::flush;
+	replies = read_isready_replies(engine_process->engine_to_host_);
 	if (replies.empty())
 		throw std::runtime_error("Engine error: Engine did not send the 'isready' message");
 	if (replies.back() != "readyok")
@@ -50,15 +69,15 @@ void Engine::reset_game()
 	// Stored game continuations are no longer valid
 	suggested_lines_.clear();
 	// Reset game state in engine
-	host_to_engine_ << "ucinewgame\n"
-					   << std::flush;
-	host_to_engine_ << "position startpos\n"
-					   << std::flush;
+	engine_process->host_to_engine_ << "ucinewgame\n"
+									<< std::flush;
+	engine_process->host_to_engine_ << "position startpos\n"
+									<< std::flush;
 
 	// Send isready command and wait for reply
-	host_to_engine_ << "isready\n"
-					   << std::flush;
-	auto replies = read_isready_replies(engine_to_host_);
+	engine_process->host_to_engine_ << "isready\n"
+									<< std::flush;
+	auto replies = read_isready_replies(engine_process->engine_to_host_);
 	if (replies.empty())
 		throw std::runtime_error("Engine error: Engine did not send the 'readyok' message");
 	if (replies.back() != "readyok")
@@ -72,15 +91,15 @@ void Engine::setup_game(const std::string& fen)
 	// Stored game continuations are no longer valid
 	suggested_lines_.clear();
 	// Update game state in engine
-	host_to_engine_ << "ucinewgame\n"
-					   << std::flush;
-	host_to_engine_ << "position " << fen << "\n"
-					   << std::flush;
+	engine_process->host_to_engine_ << "ucinewgame\n"
+									<< std::flush;
+	engine_process->host_to_engine_ << "position " << fen << "\n"
+									<< std::flush;
 
 	// Send isready command and wait for reply
-	host_to_engine_ << "isready\n"
-					   << std::flush;
-	auto replies = read_isready_replies(engine_to_host_);
+	engine_process->host_to_engine_ << "isready\n"
+									<< std::flush;
+	auto replies = read_isready_replies(engine_process->engine_to_host_);
 	if (replies.empty())
 		throw std::runtime_error("Engine error: Engine did not send the 'readyok' message");
 	if (replies.back() != "readyok")
@@ -94,13 +113,13 @@ void Engine::start_calculating(
 	stop_calculating();
 
 	// Send go command to engine
-	host_to_engine_ << "go ";
+	engine_process->host_to_engine_ << "go ";
 	if (max_calculation_time.has_value()) {
-		host_to_engine_ << "movetime " << std::chrono::milliseconds(*max_calculation_time).count() << "\n"
-						   << std::flush;
+		engine_process->host_to_engine_ << "movetime " << std::chrono::milliseconds(*max_calculation_time).count() << "\n"
+										<< std::flush;
 	} else {
-		host_to_engine_ << "infinite\n"
-						   << std::flush;
+		engine_process->host_to_engine_ << "infinite\n"
+										<< std::flush;
 	}
 
 	// Keep track of the fact that we have started a calculation (whose output we need to manage before any other calculation can be started)
@@ -114,10 +133,10 @@ void Engine::stop_calculating()
 		return;
 		
 	// Send stop calculating command to the engine
-	host_to_engine_ << "stop\n"
-					   << std::flush;
+	engine_process->host_to_engine_ << "stop\n"
+									<< std::flush;
 	// Read go replies
-	auto messages = read_go_replies(engine_to_host_);
+	auto messages = read_go_replies(engine_process->engine_to_host_);
 	// Parse engine messages
 	parse_engine_go_messages(messages);
 	// Set is calculating flag
