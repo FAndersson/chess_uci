@@ -97,7 +97,7 @@ private:
     /// Parse engine messages received after the previous go command.
 	void parse_engine_go_messages(const std::vector<std::string>& messages);
 
-    /// Struct managing the engine process and inter process communication.
+    /// Struct managing the engine process and inter process communication (pimpl).
     std::unique_ptr<Engine_process_manager> engine_process;
 
     /// Number of best lines the engine should calculate.
