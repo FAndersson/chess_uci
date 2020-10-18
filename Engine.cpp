@@ -93,7 +93,7 @@ void Engine::setup_game(const std::string& fen)
 	// Update game state in engine
 	engine_process->host_to_engine_ << "ucinewgame\n"
 									<< std::flush;
-	engine_process->host_to_engine_ << "position " << fen << "\n"
+	engine_process->host_to_engine_ << "position fen " << fen << "\n"
 									<< std::flush;
 
 	// Send isready command and wait for reply

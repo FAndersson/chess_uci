@@ -67,5 +67,30 @@ TEST_CASE("chess::uci.Engine.Stockfish number of expected lines", "[chess], [uci
 	REQUIRE((lines.size() == 4));
 }
 
+TEST_CASE("chess::uci.Engine.Stockfish number of moves to mate", "[chess], [uci]")
+{
+	// Create an instance of the interface running Stockfish
+	Engine engine("/usr/games/stockfish");
+	// Setup a position from which white can mate in 5 moves, and verify that the
+	// engine gives the expected number of moves to mate
+	std::string fen = "8/8/8/4k3/8/8/6Q1/5R1K w - - 0 20";
+	engine.setup_game(fen);
+
+	using namespace std::chrono_literals;
+	engine.start_calculating(1s);
+
+	std::this_thread::sleep_for(1s);
+	engine.stop_calculating();
+
+	// White should be able to mate in 5 moves
+	Evaluation evaluation = engine.get_evaluation();
+	REQUIRE(evaluation.white_can_mate_in.has_value());
+	REQUIRE(evaluation.white_can_mate_in.value() == 5);
+
+	const Analyzed_line& best_line = engine.get_top_suggested_move_sequences()[0];
+	// The best line should contain 9 moves, 5 for white and four for black
+	REQUIRE(best_line.line.size() == 9);
+}
+
 } // namespace uci
 } // namespace chess
