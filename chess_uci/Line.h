@@ -10,7 +10,7 @@ namespace uci {
 struct Analyzed_line
 {
 	/// Sequence of suggested best moves in long algebraic notation.
-	std::vector<std::string> line;
+	std::vector<std::string> moves;
 	/// Evaluation of the suggested game continuation.
 	Evaluation evaluation;
 };

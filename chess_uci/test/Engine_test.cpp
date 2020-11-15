@@ -26,8 +26,8 @@ TEST_CASE("chess::uci.Engine.Dummy engine", "[chess], [uci]")
 	CHECK((*evaluation.centi_pawns == 30));
 	const auto& lines = engine.get_top_suggested_move_sequences();
 	REQUIRE((lines.size() == 1));
-	REQUIRE((lines.front().line.size() == 1));
-	CHECK((lines.front().line.front() == "e2e4"));
+	REQUIRE((lines.front().moves.size() == 1));
+	CHECK((lines.front().moves.front() == "e2e4"));
 	REQUIRE(lines.front().evaluation.centi_pawns.has_value());
 	CHECK((*lines.front().evaluation.centi_pawns == 30));
 }
@@ -89,7 +89,7 @@ TEST_CASE("chess::uci.Engine.Stockfish number of moves to mate", "[chess], [uci]
 
 	const Analyzed_line& best_line = engine.get_top_suggested_move_sequences()[0];
 	// The best line should contain 9 moves, 5 for white and four for black
-	REQUIRE(best_line.line.size() == 9);
+	REQUIRE(best_line.moves.size() == 9);
 }
 
 } // namespace uci

@@ -196,7 +196,7 @@ void Engine::parse_engine_go_messages(const std::vector<std::string>& messages)
 			assert(info.sequence_of_moves.has_value());
 			
 			suggested_lines_[*info.line_index].evaluation = *info.evaluation;
-			suggested_lines_[*info.line_index].line = std::move(*info.sequence_of_moves);
+			suggested_lines_[*info.line_index].moves = std::move(*info.sequence_of_moves);
 			info_messages_read += 1;
 		}
 		idx -= 1;
