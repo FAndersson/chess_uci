@@ -74,7 +74,7 @@ TEST_CASE("chess::uci.Engine.Stockfish number of moves to mate", "[chess], [uci]
 	// Setup a position from which white can mate in 5 moves, and verify that the
 	// engine gives the expected number of moves to mate
 	std::string fen = "8/8/8/4k3/8/8/6Q1/5R1K w - - 0 20";
-	engine.setup_game(fen);
+	engine.setup_game_from_fen(fen);
 
 	using namespace std::chrono_literals;
 	engine.start_calculating(1s);

@@ -59,7 +59,13 @@ public:
      * \param fen Chess game state specified as a
      * Forsyth-Edwards Notation (FEN) string.
      */
-	void setup_game(const std::string& fen);
+	void setup_game_from_fen(const std::string& fen);
+    /**
+     * Setup game by playing the given moves from the starting position.
+     * 
+     * \param lan String of moves in long algebraic notation. 
+     */
+    void setup_game_from_moves(const std::string& lan);
 
 	/**
      * Start calculating from the current position.

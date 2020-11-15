@@ -84,7 +84,7 @@ void Engine::reset_game()
 		throw std::runtime_error("Engine error: Unexpected engine message. Expected 'readyok', got " + replies.back() + ".");
 }
 
-void Engine::setup_game(const std::string& fen)
+void Engine::setup_game_from_fen(const std::string& fen)
 {
 	// Stop any running calculation
 	stop_calculating();
@@ -94,6 +94,28 @@ void Engine::setup_game(const std::string& fen)
 	engine_process->host_to_engine_ << "ucinewgame\n"
 									<< std::flush;
 	engine_process->host_to_engine_ << "position fen " << fen << "\n"
+									<< std::flush;
+
+	// Send isready command and wait for reply
+	engine_process->host_to_engine_ << "isready\n"
+									<< std::flush;
+	auto replies = read_isready_replies(engine_process->engine_to_host_);
+	if (replies.empty())
+		throw std::runtime_error("Engine error: Engine did not send the 'readyok' message");
+	if (replies.back() != "readyok")
+		throw std::runtime_error("Engine error: Unexpected engine message. Expected 'readyok', got " + replies.back() + ".");
+}
+
+void Engine::setup_game_from_moves(const std::string& lan)
+{
+	// Stop any running calculation
+	stop_calculating();
+	// Stored game continuations are no longer valid
+	suggested_lines_.clear();
+	// Update game state in engine
+	engine_process->host_to_engine_ << "ucinewgame\n"
+									<< std::flush;
+	engine_process->host_to_engine_ << "position startpos moves " << lan << "\n"
 									<< std::flush;
 
 	// Send isready command and wait for reply
