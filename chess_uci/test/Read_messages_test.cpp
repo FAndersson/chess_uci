@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 
-#include "Read_messages.h"
+#include "chess_uci/Read_messages.h"
 
 #include <catch2/catch.hpp>
 

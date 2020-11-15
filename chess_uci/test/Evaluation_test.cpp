@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 
-#include "Evaluation.h"
+#include "chess_uci/Evaluation.h"
 
 #include <catch2/catch.hpp>
 

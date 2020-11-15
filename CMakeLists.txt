@@ -16,23 +16,23 @@ add_library(uci_engine chess_uci/Engine.cpp)
 add_executable(dummy_engine chess_uci/test/Dummy_engine.cpp)
 
 add_executable(engine_communication_test chess_uci/test/Engine_communication_test.cpp)
-target_include_directories(engine_communication_test PRIVATE ${CMAKE_CURRENT_LIST_DIR}/chess_uci)
+target_include_directories(engine_communication_test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(engine_communication_test boost_iostreams boost_system boost_thread pthread Catch2::Catch2)
 
 add_executable(engine_test chess_uci/test/Engine_test.cpp)
-target_include_directories(engine_test PRIVATE ${CMAKE_CURRENT_LIST_DIR}/chess_uci)
+target_include_directories(engine_test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(engine_test boost_iostreams boost_system boost_thread pthread uci_engine uci_support Catch2::Catch2)
 
 add_executable(evaluation_test chess_uci/test/Evaluation_test.cpp)
-target_include_directories(evaluation_test PRIVATE ${CMAKE_CURRENT_LIST_DIR}/chess_uci)
+target_include_directories(evaluation_test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(evaluation_test uci_support Catch2::Catch2)
 
 add_executable(parse_messages_test chess_uci/test/Parse_messages_test.cpp)
-target_include_directories(parse_messages_test PRIVATE ${CMAKE_CURRENT_LIST_DIR}/chess_uci)
+target_include_directories(parse_messages_test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(parse_messages_test uci_support Catch2::Catch2)
 
 add_executable(read_messages_test chess_uci/test/Read_messages_test.cpp)
-target_include_directories(read_messages_test PRIVATE ${CMAKE_CURRENT_LIST_DIR}/chess_uci)
+target_include_directories(read_messages_test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(read_messages_test uci_support Catch2::Catch2)
 
 enable_testing()
