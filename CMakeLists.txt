@@ -13,6 +13,10 @@ add_library(uci_support
 
 add_library(uci_engine chess_uci/Engine.cpp)
 
+add_executable(analyze_carlsen_caruana_example examples/Analyze_carlsen_caruana_example)
+target_include_directories(analyze_carlsen_caruana_example PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+target_link_libraries(analyze_carlsen_caruana_example boost_iostreams boost_system boost_thread pthread uci_engine uci_support  Catch2::Catch2)
+
 add_executable(dummy_engine chess_uci/test/Dummy_engine.cpp)
 
 add_executable(engine_communication_test chess_uci/test/Engine_communication_test.cpp)
