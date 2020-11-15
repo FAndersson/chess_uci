@@ -42,9 +42,13 @@ public:
      * Executable will be started in a subprocess and shut down
      * when the Engine object is destroyed.
      * \param num_best_lines Number of best lines to suggest.
-     * \param max_elo_rating Max ELO rating the engine is allowed to play at. If not specified there is no such limit.
+     * \param max_elo_rating Max ELO rating the engine is allowed to play at.
+     * If not specified there is no such limit.
      */
-	Engine(const std::filesystem::path& engine_executable, uint8_t num_best_lines = 1, std::optional<uint16_t> max_elo_rating = std::nullopt);
+	Engine(
+        const std::filesystem::path& engine_executable,
+        uint8_t num_best_lines = 1,
+        std::optional<uint16_t> max_elo_rating = std::nullopt);
 	~Engine();
 
 	/// Reset the chess game to the starting position.
