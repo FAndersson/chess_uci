@@ -4,6 +4,8 @@ project(cpp_chess_uci)
 
 set(CMAKE_CXX_STANDARD 17)
 
+find_package(Boost REQUIRED COMPONENTS
+			 iostreams system thread)
 find_package(Catch2 REQUIRED)
 
 add_library(uci_support
@@ -15,17 +17,17 @@ add_library(uci_engine chess_uci/Engine.cpp)
 
 add_executable(analyze_carlsen_caruana_example examples/Analyze_carlsen_caruana_example)
 target_include_directories(analyze_carlsen_caruana_example PRIVATE ${CMAKE_CURRENT_LIST_DIR})
-target_link_libraries(analyze_carlsen_caruana_example boost_iostreams boost_system boost_thread pthread uci_engine uci_support  Catch2::Catch2)
+target_link_libraries(analyze_carlsen_caruana_example Boost::iostreams Boost::system Boost::thread uci_engine uci_support Catch2::Catch2)
 
 add_executable(dummy_engine chess_uci/test/Dummy_engine.cpp)
 
 add_executable(engine_communication_test chess_uci/test/Engine_communication_test.cpp)
 target_include_directories(engine_communication_test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
-target_link_libraries(engine_communication_test boost_iostreams boost_system boost_thread pthread Catch2::Catch2)
+target_link_libraries(engine_communication_test Boost::iostreams Boost::system Boost::thread Catch2::Catch2)
 
 add_executable(engine_test chess_uci/test/Engine_test.cpp)
 target_include_directories(engine_test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
-target_link_libraries(engine_test boost_iostreams boost_system boost_thread pthread uci_engine uci_support Catch2::Catch2)
+target_link_libraries(engine_test boost_iostreams Boost::system Boost::thread uci_engine uci_support Catch2::Catch2)
 
 add_executable(evaluation_test chess_uci/test/Evaluation_test.cpp)
 target_include_directories(evaluation_test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
