@@ -1,7 +1,7 @@
 C++ Chess UCI Interface
 =======================
 
-![build_and_test](https://github.com/FAndersson/chess_uci/workflows/build_and_test/badge.svg)
+![build_and_test](https://github.com/FAndersson/chess_uci/workflows/Build%20and%20test/badge.svg)
 
 Introduction and motivation
 ---------------------------
