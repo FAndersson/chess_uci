@@ -1,0 +1,16 @@
+name: Build and test
+
+on: [push]
+
+jobs:
+  build and test:
+    runs-on: ubuntu-latest
+    container:
+      image: fredrikandersson/debian-testing-cpp-chess-image
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and test using CMake.
+    - run: mkdir build; cd build
+    - run: cmake ..
+    - run: cmake --build .
+    - run: ctest
