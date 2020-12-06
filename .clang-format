@@ -98,5 +98,5 @@ Standard: Cpp11
 TypenameMacros:
   - FXDEFMAP
 TabWidth:  4
-UseTab:    ForContinuationAndIndentation
+UseTab:    Always
 ...

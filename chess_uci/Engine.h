@@ -38,13 +38,13 @@ class Engine
 {
 public:
 	/**
-     * \param engine_executable Path to the engine executable.
-     * Executable will be started in a subprocess and shut down
-     * when the Engine object is destroyed.
-     * \param num_best_lines Number of best lines to suggest.
-     * \param max_elo_rating Max ELO rating the engine is allowed to play at.
-     * If not specified there is no such limit.
-     */
+	 * \param engine_executable Path to the engine executable.
+	 * Executable will be started in a subprocess and shut down
+	 * when the Engine object is destroyed.
+	 * \param num_best_lines Number of best lines to suggest.
+	 * \param max_elo_rating Max ELO rating the engine is allowed to play at.
+	 * If not specified there is no such limit.
+	 */
 	Engine(
 		const std::filesystem::path& engine_executable,
 		uint8_t num_best_lines = 1,
@@ -54,53 +54,53 @@ public:
 	/// Reset the chess game to the starting position.
 	void reset_game();
 	/**
-     * Set game to the given state.
-     *
-     * \param fen Chess game state specified as a
-     * Forsyth-Edwards Notation (FEN) string.
-     */
+	 * Set game to the given state.
+	 *
+	 * \param fen Chess game state specified as a
+	 * Forsyth-Edwards Notation (FEN) string.
+	 */
 	void setup_game_from_fen(const std::string& fen);
 	/**
-     * Setup game by playing the given moves from the starting position.
-     * 
-     * \param lan String of moves in long algebraic notation. 
-     */
+	 * Setup game by playing the given moves from the starting position.
+	 * 
+	 * \param lan String of moves in long algebraic notation. 
+	 */
 	void setup_game_from_moves(const std::string& lan);
 
 	/**
-     * Start calculating from the current position.
-     *
-     * Note: Should not be called while the engine is already calculating
-     * (as checked by is_calculating()). If a new calculation should be
-     * started with other settings than the currently running calculation
-     * then stop_calculating() should be called first.
-     *
-     * \param max_calculation_time Maximum time (in seconds) the engine is
-     * allowed to calculate. If not specified there is no limit, and the engine
-     * will calculate until stop_calculating is called.
-     */
+	 * Start calculating from the current position.
+	 *
+	 * Note: Should not be called while the engine is already calculating
+	 * (as checked by is_calculating()). If a new calculation should be
+	 * started with other settings than the currently running calculation
+	 * then stop_calculating() should be called first.
+	 *
+	 * \param max_calculation_time Maximum time (in seconds) the engine is
+	 * allowed to calculate. If not specified there is no limit, and the engine
+	 * will calculate until stop_calculating is called.
+	 */
 	void start_calculating(std::optional<std::chrono::seconds> max_calculation_time = std::nullopt);
 	/// Tell the engine to stop calculating.
 	void stop_calculating();
 
 	/**
-     * Get evaluation of the current game position.
-     * Should be called after the engine has been calculating on the
-     * current position (see start_calculating()).
-     *
-     * \return Evaluation of the current game position.
-     */
+	 * Get evaluation of the current game position.
+	 * Should be called after the engine has been calculating on the
+	 * current position (see start_calculating()).
+	 *
+	 * \return Evaluation of the current game position.
+	 */
 	Evaluation get_evaluation() const;
 
 	/**
-     * Get the top move sequences (lines) from the current position.
-     * Should be called after the engine has been calculating on the
-     * current position (see start_calculating()).
-     *
-     * \return Array of top suggested lines. The first entry in the
-     * array is the top suggestion, the second entry is the second best
-     * suggestion and so on.
-     */
+	 * Get the top move sequences (lines) from the current position.
+	 * Should be called after the engine has been calculating on the
+	 * current position (see start_calculating()).
+	 *
+	 * \return Array of top suggested lines. The first entry in the
+	 * array is the top suggestion, the second entry is the second best
+	 * suggestion and so on.
+	 */
 	const std::vector<Analyzed_line>& get_top_suggested_move_sequences() const;
 
 private:
