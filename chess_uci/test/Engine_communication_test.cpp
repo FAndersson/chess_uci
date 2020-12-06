@@ -29,7 +29,7 @@ TEST_CASE("chess::uci.Basic chess engine communication", "[communication], [ches
 
 	// Send uci command and make sure that we get a uciok reply
 	engine_input << "uci\n"
-	   << std::flush;
+				 << std::flush;
 	std::string reply;
 	bool uciok_reply = false;
 	while (std::getline(engine_output, reply))

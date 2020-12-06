@@ -3,7 +3,7 @@
  * \brief Contains an engine interface class used to run and communicate with a UCI chess engine.
  */
 
-#pragma once 
+#pragma once
 
 #include "Evaluation.h"
 #include "Line.h"
@@ -46,9 +46,9 @@ public:
      * If not specified there is no such limit.
      */
 	Engine(
-        const std::filesystem::path& engine_executable,
-        uint8_t num_best_lines = 1,
-        std::optional<uint16_t> max_elo_rating = std::nullopt);
+		const std::filesystem::path& engine_executable,
+		uint8_t num_best_lines = 1,
+		std::optional<uint16_t> max_elo_rating = std::nullopt);
 	~Engine();
 
 	/// Reset the chess game to the starting position.
@@ -60,12 +60,12 @@ public:
      * Forsyth-Edwards Notation (FEN) string.
      */
 	void setup_game_from_fen(const std::string& fen);
-    /**
+	/**
      * Setup game by playing the given moves from the starting position.
      * 
      * \param lan String of moves in long algebraic notation. 
      */
-    void setup_game_from_moves(const std::string& lan);
+	void setup_game_from_moves(const std::string& lan);
 
 	/**
      * Start calculating from the current position.
@@ -104,18 +104,18 @@ public:
 	const std::vector<Analyzed_line>& get_top_suggested_move_sequences() const;
 
 private:
-    /// Parse engine messages received after the previous go command.
+	/// Parse engine messages received after the previous go command.
 	void parse_engine_go_messages(const std::vector<std::string>& messages);
 
-    /// Struct managing the engine process and inter process communication (pimpl).
-    std::unique_ptr<Engine_process_manager> engine_process;
+	/// Struct managing the engine process and inter process communication (pimpl).
+	std::unique_ptr<Engine_process_manager> engine_process;
 
-    /// Number of best lines the engine should calculate.
-    uint8_t num_best_lines_{1};
-    /// Whether or not we have a started engine calculation, whose output has not yet been processed.
-    bool is_calculating_{false};
-    /// Top suggested lines from the last engine calculation.
-    std::vector<Analyzed_line> suggested_lines_;
+	/// Number of best lines the engine should calculate.
+	uint8_t num_best_lines_{1};
+	/// Whether or not we have a started engine calculation, whose output has not yet been processed.
+	bool is_calculating_{false};
+	/// Top suggested lines from the last engine calculation.
+	std::vector<Analyzed_line> suggested_lines_;
 };
 
 } // namespace uci

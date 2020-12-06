@@ -20,16 +20,16 @@ struct Info
 	/// Sequence of future moves the engine suggest.
 	std::optional<std::vector<std::string>> sequence_of_moves;
 	/// When the engine suggests several future move sequences at the same time,
-    /// this number gives the index of the sequence suggested in this info message.
+	/// this number gives the index of the sequence suggested in this info message.
 	/// Uses zero-based indexing, e.g. 0 for the best continuation, 1 for the
 	/// second best and so on.
-    std::optional<uint8_t> line_index;
+	std::optional<uint8_t> line_index;
 	/// Current evaluation, based on the suggested sequence of future moves.
 	std::optional<Evaluation> evaluation;
 	/// Number of nodes (game states) the engine has analyzed.
-    std::optional<unsigned int> nodes;
+	std::optional<unsigned int> nodes;
 	/// Time the engine has been calculating in milliseconds.
-    std::optional<unsigned int> time;
+	std::optional<unsigned int> time;
 };
 
 /**

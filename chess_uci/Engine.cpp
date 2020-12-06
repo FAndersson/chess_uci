@@ -1,7 +1,7 @@
 #include "Engine.h"
 
-#include "Read_messages.h"
 #include "Parse_messages.h"
+#include "Read_messages.h"
 
 #include <boost/process.hpp>
 
@@ -28,7 +28,7 @@ struct Engine_process_manager
 Engine::Engine(const std::filesystem::path& engine_executable, uint8_t num_best_lines, std::optional<uint16_t> max_elo_rating)
 	: engine_process(std::make_unique<Engine_process_manager>(engine_executable))
 	, num_best_lines_(num_best_lines)
-{	
+{
 	// Tell engine to use UCI
 	engine_process->host_to_engine_ << "uci\n"
 									<< std::flush;
@@ -153,7 +153,7 @@ void Engine::stop_calculating()
 	if (!is_calculating_)
 		// No calculation started
 		return;
-		
+
 	// Send stop calculating command to the engine
 	engine_process->host_to_engine_ << "stop\n"
 									<< std::flush;
@@ -194,7 +194,7 @@ void Engine::parse_engine_go_messages(const std::vector<std::string>& messages)
 			assert(info.evaluation.has_value());
 			assert(info.line_index.has_value());
 			assert(info.sequence_of_moves.has_value());
-			
+
 			suggested_lines_[*info.line_index].evaluation = *info.evaluation;
 			suggested_lines_[*info.line_index].moves = std::move(*info.sequence_of_moves);
 			info_messages_read += 1;
